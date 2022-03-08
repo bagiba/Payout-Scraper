@@ -24,7 +24,8 @@ def Klekt(sku):
     response = requests.post('https://apiv2.klekt.com/shop-api/', headers=headers, json=json_data)
 
     jsonero = json.loads(response.text)
-
+    
+    print(jsonero)
     l = jsonero["data"]["search"]["items"][0]["slug"]
     r = requests.get(f"https://www.klekt.com/product/{l}").text
 

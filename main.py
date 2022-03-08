@@ -1,9 +1,9 @@
-from ModuloKlekt import Klekt
-from ModuloRestocks import Restocks
-from DiscordWebhook import MandarWebhook
+from Modules.ModuloKlekt import Klekt
+from Modules.ModuloRestocks import Restocks
+from Utilities.DiscordWebhook import MandarWebhook
 
 #sku = input("SKU?: ")
-pid = 'CT8527-016'
+pid = 'DC6991-200'
 
 nombre, foto, preciosR = Restocks(pid)
 linkVentaKlekt, preciosK = Klekt(pid)
