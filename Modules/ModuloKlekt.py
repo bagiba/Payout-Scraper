@@ -17,9 +17,28 @@ def Klekt(sku):
         'variables': {
             'input': {
                 'term': sku,
+                'sizeType': 0,
+                'facetValueIds': [],
+                'groupByProduct': True,
+                'brandSlugs': [],
+                'brandLineSlugs': [],
+                'categorySlugs': [],
+                'availability': 'available',
+                'take': 48,
+                'skip': 0,
+                'sort': {
+                    'featured': 'DESC',
+                },
+                'showWithoutSizeSet': False,
+                'conditions': [
+                    'new',
+                ],
+                'boxConditionSlugs': [],
+                'itemConditionSlugs': [],
             },
         },
     }
+
 
     response = requests.post('https://apiv2.klekt.com/shop-api/', headers=headers, json=json_data)
 
