@@ -22,7 +22,7 @@ def MandarWebhook(linkFoto, nombreSneaker, pid, listaRestocks, listaKlekt, linkV
             "color": 4191046,
             "fields": [
             {
-                "name": "Kung fumetas",
+                "name": "‎",
                 "value": f"[**Restocks**](https://restocks.net/es/account/sell)\n```{preciosRestocks}```",
                 "inline": True
             },            {
