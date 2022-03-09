@@ -44,7 +44,6 @@ def Klekt(sku):
 
     jsonero = json.loads(response.text)
     
-    print(jsonero)
     l = jsonero["data"]["search"]["items"][0]["slug"]
     r = requests.get(f"https://www.klekt.com/product/{l}").text
 
@@ -67,15 +66,26 @@ def Klekt(sku):
     response = requests.post('https://apiv2.klekt.com/shop-api/', headers=headers, json=json_data)
 
     res = json.loads(response.text)
-    liston = []
+    dicty = {}
     for e in res["data"]["productDetails"]["variants"]:
-        price = int(e["priceWithTax"]) / 100
+        price = int(int(e["priceWithTax"]) / 100)
         talla = e["facetValues"][0]["name"]
 
-        liston.append(f"{talla} : {price}")
+        dicty[float(talla[2:])] = price
+
+    talls = sorted(dicty.keys())
+    presios = sorted(dicty.values())
+    liston = []
+    
+    for i in range(len(talls)):
+        if(len(str(talls[i])) < 4):
+            liston.append(f"US {talls[i]}  : {dicty[talls[i]]} €")
+        else:
+            liston.append(f"US {talls[i]} : {dicty[talls[i]]} €")
+            
+    
 
     linkVenta = "https://www.klekt.com/seller/"+l+"?condition=new"
-    liston2 = sorted(liston)
-    return linkVenta, liston2
+    return linkVenta, liston
 
 #Klekt("cw2288-111")

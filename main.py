@@ -3,7 +3,7 @@ from Modules.ModuloRestocks import Restocks
 from Utilities.DiscordWebhook import MandarWebhook
 
 #sku = input("SKU?: ")
-pid = 'DC6991-200'
+pid = 'DH4402-001'
 
 nombre, foto, preciosR = Restocks(pid)
 linkVentaKlekt, preciosK = Klekt(pid)
