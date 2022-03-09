@@ -68,7 +68,7 @@ def Klekt(sku):
     res = json.loads(response.text)
     dicty = {}
     for e in res["data"]["productDetails"]["variants"]:
-        price = int(int(e["priceWithTax"]) / 100)
+        price = int(int(e["priceWithTax"]) / 100 * 0.85)
         talla = e["facetValues"][0]["name"]
 
         dicty[float(talla[2:])] = price
