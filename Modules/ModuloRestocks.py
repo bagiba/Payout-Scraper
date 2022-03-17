@@ -45,7 +45,7 @@ def Restocks(sku):
     for i in all:
         tall = i.find("span",class_="text").text
         price = i.find("span",class_="").text
-        price = (f"{round(int(price[2:])*0.85)} €")
+        price = f"{round(int(price[2:].replace('.',''))*0.85)} €"
         if(len(tall) <= 2):
             tall = tall + "  "
         liston.append(f"{tall} : {price}")
