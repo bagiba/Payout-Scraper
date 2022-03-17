@@ -87,5 +87,3 @@ def Klekt(sku):
 
     linkVenta = "https://www.klekt.com/seller/"+l+"?condition=new"
     return linkVenta, liston
-
-#Klekt("cw2288-111")
