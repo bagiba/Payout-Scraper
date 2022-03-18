@@ -1,14 +1,15 @@
 from Modules.ModuloKlekt import Klekt
 from Modules.ModuloRestocks import Restocks
 from Utilities.DiscordWebhook import MandarWebhook
+from Modules.ModuloAlias import Alias
 
 #sku = input("SKU?: ")
-pid = 'DC6991-200'
+pid = 'DD1875-100'
 
 nombre, foto, preciosR = Restocks(pid)
 linkVentaKlekt, preciosK = Klekt(pid)
-
+listAlias = Alias(pid)
 print(preciosK)
 print(preciosR)
-
-MandarWebhook(foto, nombre, pid, preciosR, preciosK, linkVentaKlekt)
+print(listAlias)
+MandarWebhook(foto, nombre, pid, preciosR, preciosK, linkVentaKlekt,listAlias)
