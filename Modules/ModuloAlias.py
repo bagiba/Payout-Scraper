@@ -6,14 +6,14 @@ from bs4 import BeautifulSoup
 def prettyPrices(i,j):
     str =""
 
-    if len(i) < 4:
-        str = str + f"{i}   : {j}"
+    if len(i) <= 4:
+        str = str + f"{i}    : {j} €"
     elif len(i) <= 5: 
-        str = str + f"{i}  : {j}"
+        str = str + f"{i}   : {j} €"
     elif len(i) <=6:
-        str = str + f"{i} : {j}"
+        str = str + f"{i}  : {j} €"
     else:
-        str = str + f"{i}: {j}"
+        str = str + f"{i} : {j} €"
     return str
 
 def Alias(id):
@@ -34,13 +34,15 @@ def Alias(id):
         data_json = json.loads(busc.content)
         for a in data_json["availability"]:
             if "lowest_price_cents" in a:
-                s = a["size"]
+                s = float(a["size"])
                 size = str(f"US {s}")
-                price = int(a["lowest_price_cents"])/100
-                print(len(size))
+                price = 0.85*int(a["lowest_price_cents"])/100
+                print(price)
+                price = int((((price - 12)*0.981)*0.9))
+                print(price)
+
                 list.append(prettyPrices(size,price))
                 
     print(list)            
     return list
 
-Alias('DD1875-100')

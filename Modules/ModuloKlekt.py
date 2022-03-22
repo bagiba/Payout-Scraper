@@ -43,8 +43,12 @@ def Klekt(sku):
     response = requests.post('https://apiv2.klekt.com/shop-api/', headers=headers, json=json_data)
 
     jsonero = json.loads(response.text)
+    try:
+        l = jsonero["data"]["search"]["items"][0]["slug"]   
+    except:
+        return "", [] 
     
-    l = jsonero["data"]["search"]["items"][0]["slug"]
+
     r = requests.get(f"https://www.klekt.com/product/{l}").text
 
     soup = BeautifulSoup(r,"html.parser")
@@ -71,6 +75,7 @@ def Klekt(sku):
         price = int(int(e["priceWithTax"]) / 100 * 0.85)
         talla = e["facetValues"][0]["name"]
 
+        
         dicty[float(talla[2:])] = price
 
     talls = sorted(dicty.keys())
