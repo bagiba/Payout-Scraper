@@ -29,7 +29,7 @@ async def on_message(message):
             preciosAlias = "\n".join(listAlias)
             
             embed = discord.Embed(title=nombre + " (" + pid + ")",
-            color = 0xD56FCD)
+            color = 0x9faaec)
             embed.add_field(name = "‎", value = f"[**Restocks**](https://restocks.net/es/account/sell)\n```{preciosRestocks}```",inline=True)
             embed.add_field(name = "‎", value = f"[**Klekt**]({linkVentaKlekt})\n```{preciosKlekt}```",inline=True)
             embed.add_field(name = "‎", value = f"[**Alias**]()\n```{preciosAlias}```",inline=False)
