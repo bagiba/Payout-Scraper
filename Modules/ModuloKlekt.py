@@ -71,12 +71,16 @@ def Klekt(sku):
 
     res = json.loads(response.text)
     dicty = {}
+    
     for e in res["data"]["productDetails"]["variants"]:
         price = int(int(e["priceWithTax"]) / 100 * 0.85)
         talla = e["facetValues"][0]["name"]
-
+        #print(talla)
         
-        dicty[float(talla[2:])] = price
+        if "Y" in talla:
+            dicty[float(talla.replace("Y", ""))] = price
+        else:
+            dicty[float(talla[2:])] = price
 
     talls = sorted(dicty.keys())
     presios = sorted(dicty.values())
