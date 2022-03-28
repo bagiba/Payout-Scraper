@@ -15,7 +15,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith("!IndustriasCinkilleras"): 
+    if message.content.startswith("!payout"): 
         if message.guild:
             user_message = message.content.split()
             pid = user_message[1]
