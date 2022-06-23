@@ -1,3 +1,4 @@
+from unittest.result import failfast
 import discord
 from discord import Colour
 from Modules.ModuloKlekt import Klekt
@@ -15,26 +16,46 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith("!payout"): 
+    excepcionRestocks = False
+    excepcionKlekt = False
+
+    if message.content.startswith("!v "): 
         if message.guild:
             user_message = message.content.split()
             pid = user_message[1]
-            nombre, foto, preciosR =  Restocks(pid)
-            linkVentaKlekt, preciosK =  Klekt(pid)
-            listAlias =  Alias(pid)
+
+            try:
+                nombre, foto, preciosR =  Restocks(pid)
+                preciosRestocks = "\n".join(preciosR)
+            except:
+                excepcionRestocks = True
+
+            try:
+                linkVentaKlekt, preciosK =  Klekt(pid)
+                preciosKlekt = "\n".join(preciosK)
+                if preciosKlekt == "": excepcionKlekt = True
+            except:
+                excepcionKlekt = True
+
+            #listAlias =  Alias(pid)
+            #preciosAlias = "\n".join(listAlias)
             
-            
-            preciosRestocks = "\n".join(preciosR)
-            preciosKlekt = "\n".join(preciosK)
-            preciosAlias = "\n".join(listAlias)
-            
-            embed = discord.Embed(title=nombre + " (" + pid + ")",
-            color = 0x9faaec)
-            embed.add_field(name = "‎", value = f"[**Restocks**](https://restocks.net/es/account/sell)\n```{preciosRestocks}```",inline=True)
-            embed.add_field(name = "‎", value = f"[**Klekt**]({linkVentaKlekt})\n```{preciosKlekt}```",inline=True)
-            embed.add_field(name = "‎", value = f"[**Alias**]()\n```{preciosAlias}```",inline=False)
-            embed.set_footer(text="Flow 2000", icon_url="https://yt3.ggpht.com/lVOG576nC91WIpfjaS-LFjoGCnhlLxRKEKlzZpe8FIwKcCfAzYxlw_wixar7PB1OAuXjNBcDZg=s900-c-k-c0x00ffffff-no-rj")
-            embed.set_thumbnail(url=foto)
+            if not excepcionRestocks:
+                embed = discord.Embed(title=nombre + " (" + pid + ")",
+                color = 0x2DE9FC)
+                embed.add_field(name = "‎", value = f"[**Restocks**](https://restocks.net/es/account/sell)\n```{preciosRestocks}```",inline=True)
+                embed.set_thumbnail(url=foto)
+            else:
+                embed = discord.Embed(title="ERROR en el NOMBRE HDP" + " (" + "ERROR en el SKU TRIPLE HDP" + ")",
+                color = 0x2DE9FC)
+                embed.add_field(name = "‎", value = "**Restocks**\n```Excepcion en Restocks```",inline=True)
+                embed.set_thumbnail(url="https://media.discordapp.net/attachments/852943748245749793/984213090876940288/unknown.png")
+            if not excepcionKlekt:
+                embed.add_field(name = "‎", value = f"[**Klekt**]({linkVentaKlekt})\n```{preciosKlekt}```",inline=True)
+            else:
+                embed.add_field(name = "‎", value = "**Klekt**\n```Excepcion en Klekt```",inline=True)
+            #embed.add_field(name = "‎", value = f"[**Alias**]()\n```{preciosAlias}```",inline=False)
+            embed.set_footer(text="Scraper", icon_url="https://media.discordapp.net/attachments/852943748245749793/984197952971087892/dollar-sign-in-blue-circle.jpg?width=676&height=676")
             await message.channel.send(embed=embed)
       
                        
