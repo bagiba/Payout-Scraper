@@ -1,9 +1,9 @@
-from unittest.result import failfast
 import discord
 from discord import Colour
 from Modules.ModuloKlekt import Klekt
 from Modules.ModuloRestocks import Restocks
 from Modules.ModuloAlias import Alias
+from Modules.ModuloWeTheNew import WeTheNew
 
 client = discord.Client()
 
@@ -18,6 +18,7 @@ async def on_message(message):
 
     excepcionRestocks = False
     excepcionKlekt = False
+    excepcionWTN = False
 
     if message.content.startswith("!v "): 
         if message.guild:
@@ -37,6 +38,12 @@ async def on_message(message):
             except:
                 excepcionKlekt = True
 
+            try:
+                linkVentaWTN, preciosW =  WeTheNew(pid)
+                preciosWTN = "\n".join(preciosW)
+            except:
+                excepcionWTN = True
+
             #listAlias =  Alias(pid)
             #preciosAlias = "\n".join(listAlias)
             
@@ -54,6 +61,10 @@ async def on_message(message):
                 embed.add_field(name = "‎", value = f"[**Klekt**]({linkVentaKlekt})\n```{preciosKlekt}```",inline=True)
             else:
                 embed.add_field(name = "‎", value = "**Klekt**\n```Excepcion en Klekt```",inline=True)
+            if not excepcionWTN:
+                embed.add_field(name = "‎", value = f"[**We The New**]({linkVentaWTN})\n```{preciosWTN}```",inline=True)
+            else:
+                embed.add_field(name = "‎", value = "**We The New**\n```Excepcion en We The New```",inline=True)
             #embed.add_field(name = "‎", value = f"[**Alias**]()\n```{preciosAlias}```",inline=False)
             embed.set_footer(text="Scraper", icon_url="https://media.discordapp.net/attachments/852943748245749793/984197952971087892/dollar-sign-in-blue-circle.jpg?width=676&height=676")
             await message.channel.send(embed=embed)

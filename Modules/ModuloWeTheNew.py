@@ -1,48 +1,49 @@
-from typing import OrderedDict
-import requests
 import json
 from bs4 import BeautifulSoup
+import cloudscraper
 
-def prettyPrices(i,j):
-    str =""
+#sku = "DD1391-100"
+def WeTheNew(sku):
 
-    if len(i) <= 4:
-        str = str + f"{i}    : {j} €"
-    elif len(i) <= 5: 
-        str = str + f"{i}   : {j} €"
-    elif len(i) <=6:
-        str = str + f"{i}  : {j} €"
-    else:
-        str = str + f"{i} : {j} €"
-    return str
+    cookies = { "slrspc_token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNvbW11bmlzbXBvd2FoQGdtYWlsLmNvbSIsImZpcnN0bmFtZSI6Ikp1YW4iLCJsYXN0bmFtZSI6Ik1lbmVuZGV6IiwiaWF0IjoxNjU2NDUxMzI1LCJleHAiOjE2NjE2MzUzMjV9.UEOuranCfDptj1yKDxr-DmWwAreOKoKqbDVDAT0-uCk"}
 
-def Alias(id):
+    #Request que busca la zapatilla y devuelve un json, cargarlo a un diccionario
+    scraper = cloudscraper.create_scraper(browser="chrome")
+    weTheNewBuscar = scraper.get('https://sell.wethenew.com/api/products?skip=0&take=100&keywordSearch='+sku)
 
-    aliasbuscar = requests.get(f"https://www.goat.com/search?query={id}")
 
-    soupp = BeautifulSoup(aliasbuscar.content, "html.parser")
-    div = soupp.find('div', {"id":"grid-body"})
-    ass = div.find_all("a")
-    for a in ass:
-        ss = a["href"]
-        if id.lower() in ss.lower() and "/sneakers/" in ss.lower() :
-            ss = ss.replace("/sneakers/","")
-            break
-    list = []
-    busc = requests.get(f"https://sell-api.goat.com/api/v1/analytics/products/{ss}/availability")
-    if busc.status_code == 200:
-        data_json = json.loads(busc.content)
-        for a in data_json["availability"]:
-            if "lowest_price_cents" in a:
-                s = float(a["size"])
-                size = str(f"US {s}")
-                price = 0.85*int(a["lowest_price_cents"])/100
-                #print(price)
-                price = int((((price - 12)*0.981)*0.9))
-                #print(price)
+    jsonBusqueda = json.loads(weTheNewBuscar.text)
 
-                list.append(prettyPrices(size,price))
-                
-    #print(list)            
-    return list
+    #Pillar el id del json de la request
+    jsonBusqueda['results']
+    for i in jsonBusqueda['results']:
+        id = (i['id'])
 
+    linkVenta = "https://sell.wethenew.com/listing/product/"+str(id)
+    resultadoIDs = scraper.get(linkVenta, cookies=cookies)
+    soupIDs = BeautifulSoup(resultadoIDs.text, 'html.parser')
+
+
+
+    all = soupIDs.find("ul", class_ = "VariantsList_VariantsListSquare__f2Ivd")
+    IDs = all.find_all("li")
+    listonIDs = []
+    listonTallas = []
+    liston = []
+    for i in IDs:
+        listonIDs.append(i.get("id"))
+        listonTallas.append(i.text.replace("WTB", ""))
+        #if(len(i.text) <= 2):
+        #    i = i + "  "
+
+    listonPrecios = []
+    for i in listonIDs:
+        requestChetada = scraper.get("https://sell.wethenew.com/api/listings/cheapest?variantIds[]="+i, cookies=cookies)
+        listonPrecios.append(requestChetada.json())
+
+    for i in range(len(listonPrecios)):
+        preciada = listonPrecios[i][0]["price"]
+        tallada = listonTallas[i]
+        liston.append(f"{tallada} : {preciada}")
+    
+    return linkVenta, liston
